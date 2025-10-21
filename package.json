@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:Lease_Vault": "node dist/Lease_Vault/server/server.mjs"
+    "serve:ssr:Lease_Vault": "node dist/Lease_Vault/server/server.mjs",
+    "dev:flask": "cd server && . .venv/bin/activate && python app.py",
+    "dev": "bash -c 'source $HOME/.nvm/nvm.sh && nvm use 22 && concurrently -k \"bash -c \\\"source $HOME/.nvm/nvm.sh && nvm use 22 && ng serve --open --proxy-config proxy.conf.json\\\"\" \"npm run dev:flask\"'"
   },
   "prettier": {
     "printWidth": 100,
@@ -43,6 +45,7 @@
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
+    "concurrently": "^9.2.1",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
