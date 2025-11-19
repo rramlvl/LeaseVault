@@ -1,0 +1,49 @@
+<div class="container">
+  <h1 class="title">Welcome to LeaseVault</h1>
+  <p class="subtitle">
+    Securely upload your lease documents and generate a quick summary.
+  </p>
+
+  <div class="upload-section">
+    <label class="upload-label" for="fileInput">
+      📁 Upload Document
+    </label>
+
+    <input
+      type="file"
+      id="fileInput"
+      (change)="onFileSelected($event)"
+    />
+
+    <div class="upload-text">
+      Choose a file from your device to begin.
+    </div>
+
+    <div class="file-name" *ngIf="selectedFile">
+      Selected file: {{ selectedFile.name }}
+    </div>
+  </div>
+
+  <div class="buttons-row">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="run()"
+      [disabled]="loading || !selectedFile"
+    >
+      {{ loading ? 'Summarizing…' : 'Generate Summary' }}
+    </button>
+  </div>
+
+  <div class="summary-box">
+    <div class="summary-title">Summary</div>
+
+    <ng-container *ngIf="summary; else placeholder">
+      <pre>{{ summary }}</pre>
+    </ng-container>
+
+    <ng-template #placeholder>
+      Upload a document and click “Generate Summary” to see a preview here.
+    </ng-template>
+  </div>
+</div>

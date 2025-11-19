@@ -1,31 +1,45 @@
-from flask import Flask, jsonify, request
+import base64
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
+from openai_client import client
 
-def create_app():
-    app = Flask(__name__)
-    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret")
+app = Flask(__name__)
+CORS(app)
 
-    # Allow Angular to talk to Flask during local dev
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+@app.route("/api/summarize-file", methods=["POST"])
+def summarize_file():
+    uploaded = request.files.get("file")
+    prompt = request.form.get("prompt", "Summarize this document in a simple way. Make it so the general public can understand it.")
 
-    @app.get("/api/health")
-    def health():
-        return jsonify(status="ok")
+    if not uploaded:
+        return jsonify({"error": "file is required"}), 400
 
-    @app.get("/api/hello")
-    def hello():
-        name = request.args.get("name", "world")
-        return jsonify(message=f"Hello, {name}!")
+    file_bytes = uploaded.read()
+    b64 = base64.b64encode(file_bytes).decode("ascii")
+    mime = uploaded.mimetype or "application/octet-stream"
+    data_url = f"data:{mime};base64,{b64}"
 
-    @app.post("/api/echo")
-    def echo():
-        data = request.get_json(silent=True) or {}
-        return jsonify(received=data), 201
+    response = client.responses.create(
+        model="gpt-4o-mini",
+        input=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "input_file",
+                        "filename": uploaded.filename,
+                        "file_data": data_url
+                    },
+                    {
+                        "type": "input_text",
+                        "text": prompt
+                    }
+                ]
+            }
+        ]
+    )
 
-    return app
-
-app = create_app()
+    return jsonify({"summary": response.output_text})
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
