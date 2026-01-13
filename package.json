@@ -2,22 +2,18 @@
   "name": "lease-vault",
   "version": "0.0.0",
   "scripts": {
-  "ng": "ng",
-  "start": "ng serve --open --proxy-config proxy.conf.json",
-  "build": "ng build",
-  "watch": "ng build --watch --configuration development",
-  "test": "ng test",
-  "serve:ssr:Lease_Vault": "node dist/Lease_Vault/server/server.mjs",
-
-  "dev:ng": "ng serve --open --proxy-config proxy.conf.json",
-  "dev:flask:win": "cd server && .\\.venv\\Scripts\\python.exe app.py",
-  "dev:win": "concurrently -k -n ANGULAR,FLASK -c auto \"npm:dev:ng\" \"npm:dev:flask:win\"",  
-
-
-  "dev:flask:nix": "cd server && . .venv/bin/activate && python app.py",
-  "dev:nix": "bash -c 'source $HOME/.nvm/nvm.sh && nvm use 22 && concurrently -k \"bash -c \\\"source $HOME/.nvm/nvm.sh && nvm use 22 && ng serve --open --proxy-config proxy.conf.json\\\"\" \"npm run dev:flask:nix\"'"
-},
-
+    "ng": "ng",
+    "start": "ng serve --open --proxy-config proxy.conf.json",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:Lease_Vault": "node dist/Lease_Vault/server/server.mjs",
+    "dev:ng": "ng serve --open --proxy-config proxy.conf.json",
+    "dev:flask:win": "cd server && .\\.venv\\Scripts\\python.exe app.py",
+    "dev:win": "concurrently -k -n ANGULAR,FLASK -c auto \"npm:dev:ng\" \"npm:dev:flask:win\"",
+    "dev:flask:nix": "cd server && . .venv/bin/activate && python app.py",
+    "dev:nix": "bash -c 'source $HOME/.nvm/nvm.sh && nvm use 22 && concurrently -k \"bash -c \\\"source $HOME/.nvm/nvm.sh && nvm use 22 && ng serve --open --proxy-config proxy.conf.json\\\"\" \"npm run dev:flask:nix\"'"
+  },
   "prettier": {
     "printWidth": 100,
     "singleQuote": true,
@@ -43,6 +39,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
     "express": "^5.1.0",
+    "firebase": "^12.7.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
