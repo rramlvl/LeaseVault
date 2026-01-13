@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DocSummarizerService } from '../../services/doc-summarizer.service';
+import { FirestoreService } from '../../firebase/firestore.service';
+import { LEASE_SUMMARY_PROMPT } from '../../prompts/lease-summary.prompt';
 
 @Component({
   selector: 'app-doc-summarizer',
@@ -12,12 +14,12 @@ import { DocSummarizerService } from '../../services/doc-summarizer.service';
 })
 export class DocSummarizerComponent {
   selectedFile: File | null = null;
-  prompt = 'Summarize this document in 5 bullet points.';
+  prompt = LEASE_SUMMARY_PROMPT;
   summary = '';
   loading = false;
   error = '';
 
-  constructor(private summarizer: DocSummarizerService) {}
+  constructor(private summarizer: DocSummarizerService, private vault: FirestoreService) {}
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -26,23 +28,31 @@ export class DocSummarizerComponent {
     }
   }
 
-  run() {
-    if (!this.selectedFile) return;
+run() {
+  if (!this.selectedFile) return;
 
-    this.loading = true;
-    this.summary = '';
-    this.error = '';
+  this.loading = true;
+  this.summary = '';
+  this.error = '';
 
-    this.summarizer.summarizeFile(this.selectedFile, this.prompt).subscribe({
-      next: (res) => {
-        this.loading = false;
-        this.summary = res.summary;
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error = 'Summarization failed.';
-        console.error(err);
+  this.summarizer.summarizeFile(this.selectedFile, this.prompt).subscribe({
+    next: async (res) => {
+      this.loading = false;
+      this.summary = res.summary;
+
+      // ✅ Save to Firestore for this user
+      try {
+        await this.vault.saveSummary(this.selectedFile!.name, this.summary);
+      } catch (e) {
+        console.warn('Failed to save summary to Firestore:', e);
+        // Do not block the user if saving fails
       }
-    });
-  }
+    },
+    error: (err) => {
+      this.loading = false;
+      this.error = 'Summarization failed.';
+      console.error(err);
+    }
+  });
+}
 }
