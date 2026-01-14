@@ -1,49 +1,72 @@
-<div class="container">
-  <h1 class="title">Welcome to LeaseVault</h1>
-  <p class="subtitle">
-    Securely upload your lease documents and generate a quick summary.
-  </p>
-
-  <div class="upload-section">
-    <label class="upload-label" for="fileInput">
-      📁 Upload Document
-    </label>
-
-    <input
-      type="file"
-      id="fileInput"
-      (change)="onFileSelected($event)"
-    />
-
-    <div class="upload-text">
-      Choose a file from your device to begin.
+<section class="card lv-shell">
+  <div class="lv-header">
+    <div>
+      <h1 class="lv-title">LeaseVault</h1>
+      <p class="lv-subtitle">
+        Upload a lease document and get a clear, readable summary.
+      </p>
     </div>
 
-    <div class="file-name" *ngIf="selectedFile">
-      Selected file: {{ selectedFile.name }}
+    <div class="lv-status" *ngIf="selectedFile">
+      <span class="dot"></span>
+      <span class="muted">Selected:</span>
+      <span class="file">{{ selectedFile.name }}</span>
     </div>
   </div>
 
-  <div class="buttons-row">
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="run()"
-      [disabled]="loading || !selectedFile"
-    >
-      {{ loading ? 'Summarizing…' : 'Generate Summary' }}
-    </button>
+  <div class="lv-grid">
+    <!-- Left panel -->
+    <div class="lv-panel">
+      <div class="lv-panel-title">Upload</div>
+
+      <label class="lv-upload" for="fileInput">
+        <div class="lv-upload-icon">📄</div>
+        <div>
+          <div class="lv-upload-main">Choose a document</div>
+          <div class="lv-upload-sub">PDF, DOCX, or TXT recommended</div>
+        </div>
+        <div class="lv-upload-cta">Browse</div>
+      </label>
+
+      <input
+        type="file"
+        id="fileInput"
+        class="lv-file"
+        (change)="onFileSelected($event)"
+      />
+
+      <div class="lv-actions">
+        <button
+          type="button"
+          class="btn"
+          (click)="run()"
+          [disabled]="loading || !selectedFile"
+        >
+          {{ loading ? 'Summarizing…' : 'Generate Summary' }}
+        </button>
+
+        <div class="lv-hint muted" *ngIf="!selectedFile">
+          Tip: select a file to enable summarization.
+        </div>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="lv-panel">
+      <div class="lv-panel-title">Summary</div>
+
+      <div class="lv-summary">
+        <ng-container *ngIf="summary; else placeholder">
+          <pre class="lv-pre">{{ summary }}</pre>
+        </ng-container>
+
+        <ng-template #placeholder>
+          <div class="lv-placeholder">
+            Upload a document, then click <strong>Generate Summary</strong>.
+            Your summary will appear here.
+          </div>
+        </ng-template>
+      </div>
+    </div>
   </div>
-
-  <div class="summary-box">
-    <div class="summary-title">Summary</div>
-
-    <ng-container *ngIf="summary; else placeholder">
-      <pre>{{ summary }}</pre>
-    </ng-container>
-
-    <ng-template #placeholder>
-      Upload a document and click “Generate Summary” to see a preview here.
-    </ng-template>
-  </div>
-</div>
+</section>

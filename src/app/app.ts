@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { DocSummarizerComponent } from './components/doc-summarizer/doc-summarizer.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [DocSummarizerComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
