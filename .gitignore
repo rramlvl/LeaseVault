@@ -41,3 +41,15 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Firebase service account (DO NOT COMMIT)
+server/serviceAccountKey.json
+*-firebase-adminsdk-*.json
+
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+
