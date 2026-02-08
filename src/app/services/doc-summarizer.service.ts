@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, from, switchMap } from 'rxjs';
+import { getAuth } from 'firebase/auth';
+import { firebaseApp } from '../firebase/firebase.config';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +19,23 @@ export class DocSummarizerService {
     formData.append('file', file);
     formData.append('prompt', prompt);
 
-    return this.http.post<{ summary: string }>(
-      `${this.baseUrl}/summarize-file`,
-      formData
+    const auth = getAuth(firebaseApp);
+
+    return from(
+      auth.currentUser?.getIdToken() ?? Promise.reject('Not authenticated')
+    ).pipe(
+      switchMap((token) => {
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+        });
+
+        return this.http.post<{ summary: string }>(
+          `${this.baseUrl}/summarize-file`,
+          formData,
+          { headers }
+        );
+      })
     );
   }
 }
+
