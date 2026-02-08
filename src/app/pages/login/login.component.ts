@@ -1,31 +1,23 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 import { AuthService } from '../../firebase/auth.service';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  template: `
-    <section class="card" style="max-width:520px; margin: 0 auto;">
-      <h1 class="h1">Sign in</h1>
-      <p class="muted" style="margin-top: 6px;">
-        Please sign in with Google to access your LeaseVault.
-      </p>
-
-      <div style="margin-top: 14px; display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn" type="button" (click)="login()" [disabled]="loading">
-          {{ loading ? 'Signing in…' : 'Sign in with Google' }}
-        </button>
-      </div>
-
-      <p class="muted" style="margin-top: 12px; font-size: 13px;">
-        You’ll be redirected back after signing in.
-      </p>
-    </section>
-  `,
+  imports: [FormsModule, NgIf],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   loading = false;
+  error = '';
+
+  email = '';
+  password = '';
 
   constructor(
     private auth: AuthService,
@@ -33,12 +25,47 @@ export class LoginComponent {
     private route: ActivatedRoute
   ) {}
 
-  async login() {
+  private getSafeReturnUrl(): string {
+    const raw = this.route.snapshot.queryParamMap.get('returnUrl') || '/summarize';
+
+    if (!raw.startsWith('/')) return '/summarize';
+    return raw;
+  }
+
+  async loginGoogle() {
+  this.error = '';
+  try {
+    this.loading = true;
+    await this.auth.signInWithGoogle();
+    await this.router.navigateByUrl(this.getSafeReturnUrl());
+  } catch (e: any) {
+    this.error = e?.message || 'Google sign-in failed. Please try again.';
+  } finally {
+    this.loading = false;
+  }
+}
+
+  async loginEmail() {
+    this.error = '';
     try {
       this.loading = true;
-      await this.auth.signInWithGoogle();
-      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/summarize';
-      await this.router.navigateByUrl(returnUrl);
+      await this.auth.signInWithEmail(this.email.trim(), this.password);
+      await this.router.navigateByUrl(this.getSafeReturnUrl());
+    } catch (e: any) {
+      this.error = e?.message || 'Email sign-in failed. Please check your info.';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async createAccountEmail() {
+    this.error = '';
+    try {
+      this.loading = true;
+      await this.auth.createAccountWithEmail(this.email.trim(), this.password);
+      await this.router.navigateByUrl(this.getSafeReturnUrl());
+    } catch (e: any) {
+      this.error = e?.message || 'Account creation failed. Try a stronger password.';
     } finally {
       this.loading = false;
     }

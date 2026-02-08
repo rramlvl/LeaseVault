@@ -1,0 +1,76 @@
+<div class="page">
+  <div class="card" role="region" aria-label="LeaseVault sign in">
+    <header class="header">
+  <div class="brand">
+    <h1>LeaseVault</h1>
+    <p class="subtitle">Sign in to access your secure vault and summaries.</p>
+  </div>
+</header>
+
+
+    <!-- Error message -->
+    <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+
+    <!-- Email/Password -->
+    <form class="form" (ngSubmit)="loginEmail()" autocomplete="on">
+      <label class="label">
+        Email
+        <input
+          class="input"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="you@example.com"
+          required
+          [disabled]="loading"
+          autocomplete="email"
+        />
+      </label>
+
+      <label class="label">
+        Password
+        <input
+          class="input"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+          required
+          minlength="6"
+          [disabled]="loading"
+          autocomplete="current-password"
+        />
+      </label>
+
+      <button class="btn primary" type="submit" [disabled]="loading">
+        {{ loading ? 'Signing in…' : 'Sign in with Email' }}
+      </button>
+
+      <button class="btn ghost" type="button" (click)="createAccountEmail()" [disabled]="loading">
+        Create account with Email
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>or continue with</span>
+    </div>
+
+    <div class="providers">
+  <button class="btn provider" type="button" (click)="loginGoogle()" [disabled]="loading">
+    Google
+  </button>
+
+  <button class="btn provider" type="button" disabled aria-disabled="true" title="Coming soon">
+    Microsoft (soon)
+  </button>
+
+  <button class="btn provider" type="button" disabled aria-disabled="true" title="Coming soon">
+    Facebook (soon)
+  </button>
+
+  <button class="btn provider" type="button" disabled aria-disabled="true" title="Coming soon">
+    GitHub (soon)
+  </button>
+</div>
+
+
