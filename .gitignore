@@ -42,14 +42,16 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 
-
-# Firebase service account (DO NOT COMMIT)
-server/serviceAccountKey.json
-*-firebase-adminsdk-*.json
-
 # Python virtual environment
 .venv/
 
 # Python cache
 __pycache__/
 
+# Firebase service account (DO NOT COMMIT)
+server/serviceAccountKey.json
+*-firebase-adminsdk-*.json
+
+# Angular environment files (contain Firebase config)
+src/environments/environment.ts
+src/environments/environment.prod.ts
