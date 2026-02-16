@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   User,
+  signOut as fbSignOut,
 } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
 
@@ -18,14 +19,11 @@ export class AuthService {
   user$ = this.userSubject.asObservable();
 
   constructor() {
-    onAuthStateChanged(this.auth, (user) => {
-      this.userSubject.next(user);
-    });
+    onAuthStateChanged(this.auth, (user) => this.userSubject.next(user));
   }
 
   signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(this.auth, provider);
+    return signInWithPopup(this.auth, new GoogleAuthProvider());
   }
 
   signInWithEmail(email: string, password: string) {
@@ -37,6 +35,6 @@ export class AuthService {
   }
 
   signOut() {
-    return this.auth.signOut();
+    return fbSignOut(this.auth);
   }
 }

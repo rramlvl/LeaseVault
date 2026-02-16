@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, NgZone } from '@angular/core';
+import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { AuthService } from '../firebase/auth.service';
 
@@ -10,7 +10,7 @@ import { AuthService } from '../firebase/auth.service';
   template: `
     <header class="topbar">
       <div class="topbar__inner">
-        <div class="brand">LeaseVault</div>
+        <a class="brand brand-link" routerLink="/">LeaseVault</a>
 
         <nav class="nav">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
@@ -27,7 +27,6 @@ import { AuthService } from '../firebase/auth.service';
               class="btn btn--secondary"
               type="button"
               (click)="logout()"
-              style="border-color: rgba(255,255,255,0.25); background: transparent; color: white;"
             >
               Sign out
             </button>
@@ -36,15 +35,23 @@ import { AuthService } from '../firebase/auth.service';
       </div>
     </header>
 
-    <main class="container">
+    <main class="container container--wide">
       <router-outlet></router-outlet>
     </main>
   `,
 })
 export class LayoutComponent {
-  constructor(public auth: AuthService) {}
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    private zone: NgZone
+  ) {}
 
   logout() {
-    this.auth.signOut();
+    this.auth.signOut().finally(() => {
+      this.zone.run(() => {
+        this.router.navigateByUrl('/login', { replaceUrl: true });
+      });
+    });
   }
 }

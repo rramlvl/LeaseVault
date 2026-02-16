@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FirestoreService, VaultSummary } from '../../firebase/firestore.service';
+import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-vault',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <section class="card">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
         <div>
-          <h1 class="h1">Your Vault</h1>
+          <h1 class="vault-title">Your Vault</h1>
           <p class="muted" style="margin:6px 0 0;">Your saved summaries are stored per account.</p>
         </div>
         <button class="btn btn--secondary" type="button" (click)="load()" [disabled]="loading">
@@ -27,15 +29,26 @@ import { FirestoreService, VaultSummary } from '../../firebase/firestore.service
       </div>
 
       <div style="margin-top:14px; display:grid; gap:12px;" *ngIf="items.length > 0">
-        <div class="card" style="box-shadow:none;" *ngFor="let s of items">
-          <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-            <div style="font-weight:800;">{{ s.fileName }}</div>
-            <div class="muted" style="font-size:13px;">{{ formatDate(s.createdAt) }}</div>
+        <div class="vault-grid" *ngIf="items.length > 0">
+          <a class="vault-tile card"
+            *ngFor="let s of items"
+            [routerLink]="['/vault', s.id]">
+
+          <div class="tile-top">
+            <div class="tile-title">{{ s.fileName }}</div>
+            <div class="muted tile-date">{{ formatDate(s.createdAt) }}</div>
           </div>
-          <div style="margin-top:10px; border:1px solid var(--border); border-radius:12px; padding:12px; background:#fafbfc;">
-            <pre style="margin:0; white-space:pre-wrap; word-break:break-word; font-size:13px; line-height:1.5;">{{ s.summary }}</pre>
+
+          <div class="tile-preview muted">
+            {{ preview(s.summary) }}
           </div>
-        </div>
+
+          <div class="tile-badge" *ngIf="!s.fileUrl">
+            No file saved
+          </div>
+        </a>
+      </div>
+
       </div>
     </section>
   `,
@@ -48,6 +61,12 @@ export class VaultComponent {
   constructor(private vault: FirestoreService) {
     this.load();
   }
+
+  preview(text: string) {
+    const t = (text || '').trim();
+    return t.length > 160 ? t.slice(0, 160) + '…' : t;
+  }
+
 
   async load() {
     try {

@@ -2,6 +2,7 @@
   padding: 22px;
 }
 
+/* Header */
 .lv-header {
   display: flex;
   justify-content: space-between;
@@ -13,43 +14,45 @@
 
 .lv-title {
   margin: 0;
-  font-size: 28px;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: #ffffff;
 }
 
 .lv-subtitle {
   margin: 6px 0 0;
-  color: var(--muted);
+  color: rgba(229, 231, 235, 0.85);
 }
 
+/* Selected file badge */
 .lv-status {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;
-  background: #fff;
+  background: rgba(2, 6, 23, 0.55);
 }
 
 .lv-status .dot {
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: var(--accent);
+  background: rgba(229, 231, 235, 0.85);
   display: inline-block;
 }
 
 .lv-status .file {
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 650;
+  color: rgba(255, 255, 255, 0.95);
   max-width: 320px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Layout grid */
 .lv-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -63,17 +66,18 @@
   }
 }
 
+/* Panels */
 .lv-panel {
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 14px;
   padding: 16px;
-  background: #fff;
+  background: rgba(17, 24, 39, 0.92);
 }
 
 .lv-panel-title {
   font-weight: 800;
   margin-bottom: 12px;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Upload box */
@@ -81,17 +85,18 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px dashed var(--border);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
   border-radius: 14px;
   padding: 14px;
   cursor: pointer;
-  background: #fafbfc;
-  transition: background 120ms ease, border-color 120ms ease;
+  background: rgba(2, 6, 23, 0.55);
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
 }
 
 .lv-upload:hover {
-  background: #f3f6ff;
-  border-color: rgba(37, 99, 235, 0.55);
+  transform: translateY(-1px);
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .lv-upload-icon {
@@ -100,17 +105,17 @@
   border-radius: 12px;
   display: grid;
   place-items: center;
-  background: rgba(20, 184, 166, 0.12);
+  background: rgba(148, 163, 184, 0.15);
   font-size: 18px;
 }
 
 .lv-upload-main {
   font-weight: 800;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .lv-upload-sub {
-  color: var(--muted);
+  color: rgba(229, 231, 235, 0.75);
   font-size: 13px;
   margin-top: 2px;
 }
@@ -119,10 +124,10 @@
   margin-left: auto;
   padding: 8px 10px;
   border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(148, 163, 184, 0.10);
   font-weight: 700;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Hide the default file input but keep it functional */
@@ -141,14 +146,15 @@
 
 .lv-hint {
   font-size: 13px;
+  color: rgba(229, 231, 235, 0.7);
 }
 
 /* Summary box */
 .lv-summary {
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 14px;
   padding: 14px;
-  background: #fafbfc;
+  background: rgba(2, 6, 23, 0.55);
   min-height: 320px;
 }
 
@@ -159,10 +165,10 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 13px;
   line-height: 1.5;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .lv-placeholder {
-  color: var(--muted);
+  color: rgba(229, 231, 235, 0.75);
   line-height: 1.5;
 }
