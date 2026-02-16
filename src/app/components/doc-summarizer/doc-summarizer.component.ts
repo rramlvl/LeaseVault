@@ -42,7 +42,7 @@ run() {
 
       // ✅ Save to Firestore for this user
       try {
-        await this.vault.saveSummary(this.selectedFile!.name, this.summary);
+        await this.vault.saveSummary(this.selectedFile!, this.summary);
       } catch (e) {
         console.warn('Failed to save summary to Firestore:', e);
         // Do not block the user if saving fails

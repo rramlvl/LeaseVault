@@ -8,6 +8,9 @@ import { VaultComponent } from './pages/vault/vault.component';
 import { DocSummarizerComponent } from './components/doc-summarizer/doc-summarizer.component';
 import { authGuard } from './firebase/auth.guard';
 
+import { VaultDetailComponent } from './pages/vault-detail/vault-detail.component';
+
+
 export const routes: Routes = [
   // Login is always accessible
   { path: 'login', component: LoginComponent },
@@ -20,7 +23,9 @@ export const routes: Routes = [
       { path: '', component: HomeComponent, canActivate: [authGuard] },
       { path: 'summarize', component: DocSummarizerComponent, canActivate: [authGuard] },
       { path: 'vault', component: VaultComponent, canActivate: [authGuard] },
+      { path: 'vault/:id', component: VaultDetailComponent, canActivate: [authGuard] },
       { path: '**', redirectTo: '' },
+
     ],
   },
 ];
