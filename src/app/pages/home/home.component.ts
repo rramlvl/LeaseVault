@@ -35,10 +35,10 @@ import { RouterLink } from '@angular/router';
       <div class="card legal-note">
       <h3>Important Notice</h3>
         <p class="muted">
-          LeaseVault provides AI-generated summaries to assist with understanding lease
-          documents. These summaries are informational only and may not include every
-          legal detail. Users should always review the original document and not rely
-          solely on the AI summary for legal decisions.
+           By agreeing to use LeaseVault, you acknowledge that the summaries provided are for informational purposes only and do not constitute legal advice. 
+         Always consult with a qualified attorney for any legal matters or decisions. 
+         AI-generated summaries may not capture all nuances of your lease or rental agreement, and we recommend reviewing the original document carefully.
+         AI-generated summaries may contain inaccuracies or omissions. Users should not rely solely on the summaries for making important decisions regarding their leases or rentals.
         </p>
     </div>
       
