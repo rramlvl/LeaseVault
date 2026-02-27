@@ -10,8 +10,13 @@ from firebase_admin import credentials, auth as fb_auth
 
 from openai_client import client
 
+from flask import abort
+
 app = Flask(__name__)
 CORS(app)
+
+MAX_BYTES = 10 * 1024 * 1024  # 10 MB
+ALLOWED_MIME = {"application/pdf"}
 
 # ---- Firebase Admin init (do this once) ----
 # Option A (recommended for dev): point to your service account JSON path
@@ -59,9 +64,29 @@ def summarize_file():
     if not uploaded:
         return jsonify({"error": "file is required"}), 400
 
-    file_bytes = uploaded.read()
-    b64 = base64.b64encode(file_bytes).decode("ascii")
+    # ---- Server-side validation ----
+
+    # Size check (Content-Length includes multipart overhead)
+    if request.content_length and request.content_length > MAX_BYTES:
+        return jsonify({"error": "File too large (max 10 MB)"}), 413
+
     mime = uploaded.mimetype or "application/octet-stream"
+    if mime not in ALLOWED_MIME:
+        return jsonify({"error": "Only PDF files are allowed"}), 400
+
+    # Extension check as backup
+    name = (uploaded.filename or "").lower()
+    if not name.endswith(".pdf"):
+        return jsonify({"error": "Only .pdf files are allowed"}), 400
+
+    file_bytes = uploaded.read()
+
+    # Exact size check after read
+    if len(file_bytes) > MAX_BYTES:
+        return jsonify({"error": "File too large (max 10 MB)"}), 413
+
+    # ---- Convert to base64 for OpenAI ----
+    b64 = base64.b64encode(file_bytes).decode("ascii")
     data_url = f"data:{mime};base64,{b64}"
 
     response = client.responses.create(
@@ -83,9 +108,6 @@ def summarize_file():
             }
         ]
     )
-
-    # You can log uid for audit trails later if you want:
-    # print(f"Summarized for uid={uid}, file={uploaded.filename}")
 
     return jsonify({"summary": response.output_text})
 

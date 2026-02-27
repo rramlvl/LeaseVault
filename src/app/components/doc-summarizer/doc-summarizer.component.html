@@ -23,7 +23,7 @@
         <div class="lv-upload-icon">📄</div>
         <div>
           <div class="lv-upload-main">Choose a document</div>
-          <div class="lv-upload-sub">PDF, DOCX, or TXT recommended</div>
+          <div class="lv-upload-sub">PDF only (max 10 MB)</div>
         </div>
         <div class="lv-upload-cta">Browse</div>
       </label>
@@ -32,6 +32,7 @@
         type="file"
         id="fileInput"
         class="lv-file"
+        accept="application/pdf"
         (change)="onFileSelected($event)"
       />
 
