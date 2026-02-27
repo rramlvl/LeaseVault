@@ -22,11 +22,31 @@ export class DocSummarizerComponent {
   constructor(private summarizer: DocSummarizerService, private vault: FirestoreService) {}
 
   onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
+  const input = event.target as HTMLInputElement;
+  const file = input.files && input.files.length > 0 ? input.files[0] : null;
+
+  this.error = '';
+  this.selectedFile = null;
+
+  if (!file) return;
+
+  // PDF only
+  if (file.type !== 'application/pdf') {
+    this.error = 'Please select a PDF file only.';
+    input.value = ''; // clears the file picker
+    return;
   }
+
+  // 10 MB limit
+  const max = 10 * 1024 * 1024;
+  if (file.size > max) {
+    this.error = 'PDF is too large (max 10 MB).';
+    input.value = '';
+    return;
+  }
+
+  this.selectedFile = file;
+}
 
 run() {
   if (!this.selectedFile) return;
@@ -40,12 +60,13 @@ run() {
       this.loading = false;
       this.summary = res.summary;
 
-      // ✅ Save to Firestore for this user
+      //  Save to Firestore for this user
       try {
         await this.vault.saveSummary(this.selectedFile!, this.summary);
-      } catch (e) {
-        console.warn('Failed to save summary to Firestore:', e);
-        // Do not block the user if saving fails
+        } catch (e) {
+        const err = e as any;
+        console.error('Save failed:', err?.code, err?.message, err);
+        this.error = `Save failed: ${err?.code ?? ''} ${err?.message ?? err}`;
       }
     },
     error: (err) => {
