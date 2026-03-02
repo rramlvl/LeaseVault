@@ -30,23 +30,37 @@ import { RouterLink } from '@angular/router';
 
       <div style="margin-top:14px; display:grid; gap:12px;" *ngIf="items.length > 0">
         <div class="vault-grid" *ngIf="items.length > 0">
-          <a class="vault-tile card"
+          <a
+            class="vault-tile card"
             *ngFor="let s of items"
-            [routerLink]="['/vault', s.id]">
+            [class.is-pinned]="!!s.pinned"
+            [routerLink]="['/vault', s.id]"
+          >
+
+          <button
+            type="button"
+            class="pin-btn"
+            [class.is-on]="!!s.pinned"
+            (click)="togglePin($event, s)"
+            [attr.title]="s.pinned ? 'Unpin' : 'Pin'"
+            [attr.aria-label]="s.pinned ? 'Unpin' : 'Pin'"
+          >
+            📌
+          </button>
 
           <div class="tile-top">
-            <div class="tile-title">{{ s.fileName }}</div>
-            <div class="muted tile-date">{{ formatDate(s.createdAt) }}</div>
+          <div class="tile-title">{{ s.fileName }}</div>
+          <div class="muted tile-date">{{ formatDate(s.createdAt) }}</div>
           </div>
 
-          <div class="tile-preview muted">
-            {{ preview(s.summary) }}
-          </div>
+        <div class="tile-preview muted">
+        {{ preview(s.summary) }}
+        </div>
 
-          <div class="tile-badge" *ngIf="!s.fileUrl">
-            No file saved
-          </div>
-        </a>
+      <div class="tile-badge" *ngIf="!s.fileUrl">
+      No file saved
+      </div>
+    </a>
       </div>
 
       </div>
@@ -73,6 +87,8 @@ export class VaultComponent {
       this.loading = true;
       this.error = null;
       this.items = await this.vault.listSummaries();
+      this.items = await this.vault.listSummaries();
+      this.sortItems();
     } catch (e: any) {
       this.error = e?.message ?? 'Failed to load vault';
       this.items = [];
@@ -84,4 +100,30 @@ export class VaultComponent {
   formatDate(ms: number) {
     return new Date(ms).toLocaleString();
   }
+
+  private sortItems() {
+  this.items = [...this.items].sort((a, b) => {
+    const ap = a.pinned ? 1 : 0;
+    const bp = b.pinned ? 1 : 0;
+    if (bp !== ap) return bp - ap;
+    return (b.createdAt ?? 0) - (a.createdAt ?? 0); 
+  });
+}
+
+async togglePin(ev: MouseEvent, s: VaultSummary) {
+  ev.preventDefault();
+  ev.stopPropagation();
+
+  const next = !s.pinned;
+  s.pinned = next;
+  this.sortItems();
+
+  try {
+    await this.vault.setPinned(s.id!, next);
+  } catch (e) {
+    s.pinned = !next;
+    this.sortItems();
+    this.error = 'Failed to update pin';
+  }
+}
 }

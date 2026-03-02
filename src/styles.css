@@ -222,18 +222,50 @@ body {
   border-color: rgba(255, 255, 255, 0.30);
 }
 
+.vault-tile {
+  position: relative;
+}
+
+.pin-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(2, 6, 23, 0.55);
+  color: rgba(255,255,255,0.9);
+
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.vault-tile:hover .pin-btn {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.pin-btn.is-on {
+  background: rgba(229, 231, 235, 0.92);
+  color: #0b1220;
+  border-color: rgba(229, 231, 235, 0.85);
+}
+
 .tile-top {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
+  padding-right: 46px;
 }
 
 .tile-title {
   font-weight: 800;
   color: #ffffff;
-
-  /* prevent overflow */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -260,6 +292,11 @@ body {
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.22);
   color: rgba(229,231,235,0.8);
+}
+
+.vault-tile.is-pinned {
+  border: 2px solid rgba(229, 231, 235, 0.95);
+  background: rgba(148, 163, 184, 0.10);
 }
 
 @media (max-width: 900px) {

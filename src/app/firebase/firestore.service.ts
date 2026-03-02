@@ -16,6 +16,8 @@ export type VaultSummary = {
 
   fileUrl?: string;
   fileType?: string;
+
+  pinned?: boolean;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -109,6 +111,18 @@ export class FirestoreService {
 
     const snap = await getDocs(q);
     return snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as VaultSummary[];
+  }
+
+  async setPinned(id: string, pinned: boolean): Promise<void> {
+    if (!this.isBrowser) return;
+
+    const uid = await this.getUid();
+    const { getFirestore, doc, updateDoc } = await import('firebase/firestore');
+
+    const db = getFirestore(firebaseApp);
+    const docRef = doc(db, 'users', uid, 'summaries', id);
+
+    await updateDoc(docRef, { pinned });
   }
 
   async getSummary(id: string): Promise<VaultSummary | null> {
