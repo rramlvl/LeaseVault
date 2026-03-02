@@ -15,11 +15,15 @@
   </div>
 
   <div class="lv-grid">
-    <!-- Left panel --->
     <div class="lv-panel">
       <div class="lv-panel-title">Upload</div>
 
-      <label class="lv-upload" for="fileInput">
+      <label
+        class="lv-upload"
+        [class.is-disabled]="!consentChecked"
+        for="fileInput"
+      >
+
         <div class="lv-upload-icon">📄</div>
         <div>
           <div class="lv-upload-main">Choose a document</div>
@@ -33,8 +37,30 @@
         id="fileInput"
         class="lv-file"
         accept="application/pdf"
+        [disabled]="!consentChecked"
         (change)="onFileSelected($event)"
       />
+
+      <div class="lv-consent">
+          <label class="lv-consent-row">
+            <input
+              type="checkbox"
+              [(ngModel)]="consentChecked"
+              aria-label="Agree to important notice"
+            />
+          <span class="lv-consent-title">I agree to the Important Notice</span>
+      </label>
+
+        <div class="lv-consent-text">
+          <strong>Important Notice</strong><br />
+            By agreeing to use LeaseVault, you acknowledge that the summaries provided are for informational
+            purposes only and do not constitute legal advice. Always consult with a qualified attorney for any
+            legal matters or decisions. AI-generated summaries may not capture all nuances of your lease or
+            rental agreement, and we recommend reviewing the original document carefully. AI-generated
+            summaries may contain inaccuracies or omissions. Users should not rely solely on the summaries
+            for making important decisions regarding their leases or rentals.
+          </div>
+        </div>
 
       <div class="lv-actions">
         <button
@@ -47,12 +73,11 @@
         </button>
 
         <div class="lv-hint muted" *ngIf="!selectedFile">
-          Tip: select a file to enable summarization.
+          Please check the consent box and select a file to allow summarization.
         </div>
       </div>
     </div>
 
-    <!-- Right panel -->
     <div class="lv-panel">
       <div class="lv-panel-title">Summary</div>
 
