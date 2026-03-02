@@ -6,16 +6,15 @@ import { AuthService } from '../../firebase/auth.service';
 import { filter, take } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   standalone: true,
   imports: [FormsModule, NgIf, RouterLink],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  templateUrl: './signup.component.html',
+  styleUrls: ['../login/login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class SignupComponent implements OnInit {
   loading = false;
   error = '';
-  authReady = false;
 
   email = '';
   password = '';
@@ -26,21 +25,6 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {}
-
-  ngOnInit() {
-  this.auth.user$
-    .pipe(
-      filter((u) => u !== undefined),
-      take(1)
-    )
-    .subscribe((u) => {
-      this.authReady = true;
-
-      if (u) {
-        this.router.navigateByUrl(this.getSafeReturnUrl(), { replaceUrl: true });
-      }
-    });
-  }
 
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
@@ -57,25 +41,22 @@ export class LoginComponent implements OnInit {
     switch (code) {
       case 'auth/invalid-email':
         return 'Please enter a valid email.';
-      case 'auth/user-not-found':
-        return 'No account found for that email.';
-      case 'auth/wrong-password':
-      case 'auth/invalid-credential':
-        return 'Incorrect email or password.';
-      case 'auth/popup-closed-by-user':
-        return 'Google sign-in was closed. Please try again.';
+      case 'auth/email-already-in-use':
+        return 'An account already exists with that email.';
+      case 'auth/weak-password':
+        return 'Password is too weak. Try 6+ characters.';
       case 'auth/network-request-failed':
         return 'Network error. Check your connection and try again.';
       default:
-        return e?.message || 'Sign-in failed. Please try again.';
+        return e?.message || 'Account creation failed. Please try again.';
     }
   }
 
-  async loginGoogle() {
+  async createAccountEmail() {
     this.error = '';
     try {
       this.loading = true;
-      await this.auth.signInWithGoogle();
+      await this.auth.createAccountWithEmail(this.email.trim(), this.password);
       await this.router.navigateByUrl(this.getSafeReturnUrl(), { replaceUrl: true });
     } catch (e: any) {
       this.error = this.friendlyAuthError(e);
@@ -84,17 +65,15 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async loginEmail() {
-    this.error = '';
-    try {
-      this.loading = true;
-      await this.auth.signInWithEmail(this.email.trim(), this.password);
-      await this.router.navigateByUrl(this.getSafeReturnUrl(), { replaceUrl: true });
-    } catch (e: any) {
-      this.error = this.friendlyAuthError(e);
-    } finally {
-      this.loading = false;
-    }
+  ngOnInit() {
+    this.auth.user$
+      .pipe(
+        filter((u) => u !== undefined),
+        filter((u) => !!u),
+        take(1)
+      )
+      .subscribe(() => {
+        this.router.navigateByUrl(this.getSafeReturnUrl(), { replaceUrl: true });
+      });
   }
-
 }
