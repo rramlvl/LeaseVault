@@ -14,6 +14,10 @@ import { RouterLink } from '@angular/router';
         <div>
           <h1 class="vault-title">Your Vault</h1>
           <p class="muted" style="margin:6px 0 0;">Your saved summaries are stored per account.</p>
+          <p class="muted" style="margin:6px 0 0;">
+            Total summaries in your Vault:
+            <strong style="color:#ffffff;">{{ loading ? '—' : items.length }}</strong>
+          </p>
         </div>
         <button class="btn btn--secondary" type="button" (click)="load()" [disabled]="loading">
           {{ loading ? 'Refreshing…' : 'Refresh' }}
