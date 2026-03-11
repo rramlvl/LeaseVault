@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {
-  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
@@ -8,18 +7,29 @@ import {
   onAuthStateChanged,
   User,
   signOut as fbSignOut,
+  setPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
+import { firebaseAuth } from './firebase.config';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private auth = getAuth();
+  private auth = firebaseAuth;
 
   private userSubject = new BehaviorSubject<User | null | undefined>(undefined);
   user$ = this.userSubject.asObservable();
 
   constructor() {
-    onAuthStateChanged(this.auth, (user) => this.userSubject.next(user));
+    (async () => {
+      try {
+        await setPersistence(this.auth, browserLocalPersistence);
+      } catch (err) {
+        console.error('Auth persistence error:', err);
+      }
+
+      onAuthStateChanged(this.auth, (user) => this.userSubject.next(user));
+    })();
   }
 
   signInWithGoogle() {

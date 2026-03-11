@@ -13,7 +13,7 @@
 
 .card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   background: rgba(17, 24, 39, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 16px;
@@ -23,7 +23,7 @@
 
 .brand {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 h1 {
@@ -57,7 +57,6 @@ h1 {
   width: 100%;
   padding: 11px 12px;
   border-radius: 12px;
-
   border: 1px solid rgba(148, 163, 184, 0.22);
   background: rgba(2, 6, 23, 0.55);
   color: #e5e7eb;
@@ -73,6 +72,36 @@ h1 {
   box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
 }
 
+.passwordRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.iconBtn {
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(148, 163, 184, 0.10);
+  color: rgba(229, 231, 235, 0.9);
+  padding: 11px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 750;
+  transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}
+
+.iconBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(148, 163, 184, 0.16);
+  border-color: rgba(148, 163, 184, 0.32);
+}
+
+.iconBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .btn {
   width: 100%;
   border: 1px solid rgba(148, 163, 184, 0.22);
@@ -81,7 +110,7 @@ h1 {
   padding: 11px 12px;
   border-radius: 12px;
   cursor: pointer;
-  font-weight: 650;
+  font-weight: 750;
   transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
 }
 
@@ -107,10 +136,6 @@ h1 {
   background: rgba(229, 231, 235, 0.98);
 }
 
-.ghost {
-  background: transparent;
-}
-
 .divider {
   margin: 18px 0 14px;
   display: grid;
@@ -128,18 +153,8 @@ h1 {
   background: rgba(148, 163, 184, 0.18);
 }
 
-.providers {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.provider {
-  text-align: center;
-}
-
 .error {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid rgba(248, 113, 113, 0.35);
@@ -148,18 +163,23 @@ h1 {
   font-size: 0.9rem;
 }
 
-.note {
+.switch {
   margin: 16px 0 0;
-  color: rgba(229, 231, 235, 0.55);
-  font-size: 0.82rem;
-  line-height: 1.25rem;
+  font-size: 0.85rem;
+  color: rgba(229, 231, 235, 0.7);
+  text-align: center;
 }
 
-@media (max-width: 480px) {
-  .card {
-    padding: 22px;
-  }
-  .providers {
-    grid-template-columns: 1fr;
-  }
+.link {
+  color: rgba(229, 231, 235, 0.95);
+  font-weight: 750;
+  text-decoration: underline;
+}
+
+.loadingBox {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  color: rgba(229, 231, 235, 0.8);
 }

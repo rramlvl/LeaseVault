@@ -1,17 +1,15 @@
-<ng-container *ngIf="authReady; else loadingTpl">
-
-  <div class="page">
-  <div class="card" role="region" aria-label="LeaseVault sign in">
+<div class="page">
+  <div class="card" role="region" aria-label="LeaseVault create account">
     <header class="header">
       <div class="brand">
         <h1>LeaseVault</h1>
-        <p class="subtitle">Securely access your vault and summaries.</p>
+        <p class="subtitle">Create your account to start saving summaries.</p>
       </div>
     </header>
 
     <p *ngIf="error" class="error" role="alert">{{ error }}</p>
 
-    <form class="form" (ngSubmit)="loginEmail()" autocomplete="on">
+    <form class="form" (ngSubmit)="createAccountEmail()" autocomplete="on">
       <label class="label">
         Email
         <input
@@ -34,11 +32,11 @@
             [type]="showPassword ? 'text' : 'password'"
             name="password"
             [(ngModel)]="password"
-            placeholder="••••••••"
+            placeholder="Create a password"
             required
             minlength="6"
             [disabled]="loading"
-            autocomplete="current-password"
+            autocomplete="new-password"
           />
 
           <button
@@ -55,27 +53,13 @@
       </label>
 
       <button class="btn primary" type="submit" [disabled]="loading">
-        {{ loading ? 'Signing in…' : 'Sign in' }}
+        {{ loading ? 'Creating…' : 'Create account' }}
       </button>
     </form>
 
-    <div class="divider">
-      <span>or</span>
-    </div>
-
-    <button class="btn provider" type="button" (click)="loginGoogle()" [disabled]="loading">
-      Continue with Google
-    </button>
-
     <p class="switch">
-      Don’t have an account?
-      <a class="link" [routerLink]="['/signup']">Create one</a>
+      Already have an account?
+      <a class="link" [routerLink]="['/login']">Sign in</a>
     </p>
   </div>
 </div>
-
-</ng-container>
-
-<ng-template #loadingTpl>
-  <div class="loadingBox">Loading…</div>
-</ng-template>

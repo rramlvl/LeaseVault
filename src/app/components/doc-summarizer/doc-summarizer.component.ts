@@ -18,6 +18,7 @@ export class DocSummarizerComponent {
   summary = '';
   loading = false;
   error = '';
+  consentChecked = false;
 
   constructor(private summarizer: DocSummarizerService, private vault: FirestoreService) {}
 

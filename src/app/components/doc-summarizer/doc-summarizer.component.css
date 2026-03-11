@@ -93,7 +93,7 @@
   transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
 }
 
-.lv-upload:hover {
+.lv-upload:not(.is-disabled):hover {
   transform: translateY(-1px);
   background: rgba(148, 163, 184, 0.12);
   border-color: rgba(255, 255, 255, 0.35);
@@ -170,4 +170,58 @@
 .lv-placeholder {
   color: rgba(229, 231, 235, 0.75);
   line-height: 1.5;
+}
+
+
+.btn--accent {
+  background: rgba(2, 6, 23, 0.55); /* same base tone as panels */
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 12px;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.btn--accent:hover {
+  transform: translateY(-1px);
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+
+.lv-consent {
+  margin: 12px 0 14px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(2, 6, 23, 0.45);
+}
+
+.lv-consent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lv-consent-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: rgba(148, 163, 184, 0.9);
+}
+
+.lv-consent-title {
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.lv-consent-text {
+  margin-top: 10px;
+  color: rgba(229, 231, 235, 0.78);
+  font-size: 13px;
+  line-height: 1.45;
 }
