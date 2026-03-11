@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { firebaseAuth } from './firebase.config';  // same folder
+import { firebaseAuth } from './firebase.config';
 
 export const redirectIfAuthedGuard: CanActivateFn = (_route, state) => {
   const router = inject(Router);
